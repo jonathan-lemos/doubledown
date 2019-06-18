@@ -2,6 +2,23 @@ source(file = "import.R")
 import("magrittr")
 import("dequer")
 
+pct_chg <- function(input) {
+	ret <- c(NA)
+	for (i in 2:length(input)) {
+		ret[i] = (input[i] / input[i - 1]) * 100
+	}
+	ret
+}
+
+turnaround <- function(input) {
+	sign(input - lag(input)) != sign(lag(input) - lag(input, 2))
+}
+
+cross <- function(input1, input2) {
+	tmp <- input1 - input2
+	sign(tmp) != sign(lag(tmp))
+}
+
 sma <- function(input, n = 20) {
 	acc <- 0
 	ret <- c()
@@ -12,7 +29,7 @@ sma <- function(input, n = 20) {
 		}
 		ret[i] <- acc / min(i, n)
 	}
-	return(ret)
+	ret
 }
 
 ema <- function(input, n = 20) {
@@ -23,30 +40,20 @@ ema <- function(input, n = 20) {
 		acc <- (acc * (1 - multiplier)) + (input[i] * multiplier)
 		ret[i] <- acc
 	}
-	return(ret)
+	ret
 }
 
-macd <- function(input, fast = 12, slow = 26) {
-	return(input %>% ema(fast) - input %>% ema(slow))
-}
-
-macd_signal <- function(input, n = 9, fast = 12, slow = 26) {
-	return input %>% macd(fast, slow) %>% ema(9)
-}
-
-pct_chg <- function(input) {
-	ret <- c(NA)
-	for (i in 2:length(input)) {
-		ret[i] = (input[i] / input[i - 1]) * 100
-	}
-	return(ret)
+macd <- function(input, fast = 12, slow = 26, signal = 9) {
+	tmp <- input %>% ema(fast) - input %>% ema(slow)
+	data.frame("macd" = tmp,
+			   "macd_signal" = tmp %>% ema(signal))
 }
 
 rsi <- function(input, n = 14) {
 	sample <- input[1:n] %>% pct_chg
 	avg_gain <- sample[sample > 0] %>% mean
 	avg_loss <- sample[sample < 0] %>% mean
-	return(100 - (100 / (1 + (avg_gain / avg_loss))))
+	100 - (100 / (1 + (avg_gain / avg_loss)))
 }
 
 bb_moving_sd <- function(input, n = 20) {
@@ -67,21 +74,27 @@ bb_moving_sd <- function(input, n = 20) {
 		}
 		ret[i] <- sqrt(variance / (min(i, n) - 1))
 	}
-	return(ret)
+	ret
 }
 
-bb_top <- function(input, mavg_days = 20, n_stddev = 2) {
+bb <- function(input, mavg_days = 20, n_stddev = 2) {
 	mavg <- input %>% sma(mavg_days)
 	stddev <- bb_moving_sd(mavg_days) * n_stddev
-	return(mavg + stddev)
-}
-
-bb_bot <- function(input, mavg_days = 20, n_stddev = 2) {
-	mavg <- input %>% sma(mavg_days)
-	stddev <- input %>% bb_moving_sd(mavg_days) * n_stddev
-	return(mavg - stddev)
+	data.frame("bb_top" = mavg + stddev,
+			   "bb_bot" = mavg - stddev)
 }
 
 bb_div <- function(input, mavg_days = 20, n_stddev = 2) {
-	return(input %>% bb_moving_sd(mavg_days) * n_stddev)
+	input %>% bb_moving_sd(mavg_days) * n_stddev
 }
+
+fib_retrace <- function(input, level, n_days = 30) {
+	selection <- input %>% tail(n_days)
+	minimum <- selection %>% min
+	maximum <- selection %>% max
+	fib_levels <- c(0, 0.236068, 0.381966, 0.5, 0.618034, 1)
+	row_names <- paste("fib", 1:length(c), sep = "")
+	calcs <- minimum + ((maximum - minimum) * fib_levels)
+	data.frame(calcs, row.names = row_names)
+}
+
