@@ -1,0 +1,16 @@
+Package: doubledown
+Title: Double Down
+Version: 0.1
+Authors@R: person("Jonathan", "Lemo", email = "jonathanlemos@protonmail.com", role = c("aut", "cre"))
+Description: Analyzes stock data so you can lose money with confidence.
+Depends: R (>= 3.6.0)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+	dequer,
+	dplyr,
+	ggplot2,
+	hash,
+	readr
+
