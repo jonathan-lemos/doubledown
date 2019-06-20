@@ -1,13 +1,3 @@
-get_csv <- function(symbol, api_vantage_api_key) {
-	link <- paste("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=", symbol, "&datatype=csv&outputsize=full&apikey=", alpha_vantage_api_key, sep = "")
-	response <- link %>% read.csv %>% mutate(timestamp = as.Date(timestamp))
-	return(response[nrow(response) : 1,])
-}
-
-get_all <- function(symbols, alpha_vantage_api_key) {
-	return(hash(symbols, symbols %>% lapply(get_csv, alpha_vantage_api_key)))
-}
-
 format_date <- function(plot, data) {
 	plot +
 		scale_x_date(breaks = data$timestamp) +
@@ -16,11 +6,11 @@ format_date <- function(plot, data) {
 
 add_candlestick <- function(plot, data) {
 	plot +
-		geom_linerange(aes(x = timestamp, ymin = low, ymax = high)) +
+		geom_linerange(aes(x = timestamp, ymin = low, ymax = high), data = data) +
 		geom_rect(aes(xmin = timestamp - 0.4,
 					  xmax = timestamp + 0.4,
 					  ymin = pmin(open, close),
-					  ymax = pmax(open, close)),
+					  ymax = pmax(open, close), data = data),
 				  fill = ifelse(data$close >= data$open, "darkgreen", "darkred"))
 }
 
