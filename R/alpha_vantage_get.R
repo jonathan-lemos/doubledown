@@ -16,17 +16,17 @@ alpha_vantage_get <- function(symbol, api_key) {
 		}
 		coef <- 1
 		for (i in length(input):1) {
-			coef <- coef * split_coefficient[i]
 			input[i] <- input[i] / coef
+			coef <- coef * split_coefficient[i]
 		}
 		input
 	}
 
 	link <- paste("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=", symbol, "&datatype=csv&outputsize=full&apikey=", api_key, sep = "")
 
-	response <- link %>%
-		read.csv %>%
-		mutate(
+	response <- link %>% read.csv
+	response <- response[nrow(response) : 1,]
+	response <- response %>% mutate(
 			   timestamp = as.Date(timestamp),
 			   open = open %>% split_adjust(split_coefficient),
 			   high = high %>% split_adjust(split_coefficient),
@@ -34,6 +34,4 @@ alpha_vantage_get <- function(symbol, api_key) {
 			   close = close %>% split_adjust(split_coefficient)
 			   ) %>%
 		select(-adjusted_close, -dividend_amount, -split_coefficient)
-
-	response[nrow(response) : 1,]
 }

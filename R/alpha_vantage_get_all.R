@@ -8,5 +8,5 @@
 #' @return The corresponding \code{hash()}.
 #' @export
 alpha_vantage_get_all <- function(symbols, api_key) {
-	return(hash(symbols, symbols %>% lapply(get_csv, api_key)))
+	hash(symbols, symbols %>% lapply(alpha_vantage_get, api_key))
 }
