@@ -11,11 +11,13 @@
 #' @export
 candlestick <- function(plot, data) {
 	plot +
+#		geom_boxplot(aes(x = data$timestamp, ymin = data$low, ymax = data$high, lower = pmin(data$open, data$close), upper = pmax(data$open, data$close), middle = rep(NA, nrow(data)), stat = "identity")
+
 		geom_linerange(aes(x = timestamp, ymin = low, ymax = high), data = data) +
-		geom_rect(aes(xmin = timestamp - 0.4,
-					  xmax = timestamp + 0.4,
-					  ymin = pmin(open, close),
-					  ymax = pmax(open, close)),
+		geom_tile(aes(x = timestamp,
+					  width = 0.8,
+					  y = (open + close) / 2,
+					  height = abs(open - close)),
 				  data = data,
 				  fill = ifelse(data$close >= data$open, "darkgreen", "darkred"))
 }
