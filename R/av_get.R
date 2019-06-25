@@ -9,7 +9,7 @@
 #' @param api_key The Alpha Vantage API key to use. Get one at https://www.alphavantage.co/support/#api-key
 #' @return The corresponding data frame.
 #' @export
-alpha_vantage_get <- function(symbol, api_key) {
+av_get <- function(symbol, api_key) {
 	split_adjust <- function(input, split_coefficient) {
 		if (length(input) != length(split_coefficient)) {
 			stop("The length of the input does not equal the length of the split coefficient data.")
@@ -31,7 +31,8 @@ alpha_vantage_get <- function(symbol, api_key) {
 			   open = open %>% split_adjust(split_coefficient),
 			   high = high %>% split_adjust(split_coefficient),
 			   low = low %>% split_adjust(split_coefficient),
-			   close = close %>% split_adjust(split_coefficient)
+			   close = close %>% split_adjust(split_coefficient),
+			   volume = volume %>% split_adjust(split_coefficient)
 			   ) %>%
 		select(-adjusted_close, -dividend_amount, -split_coefficient)
 }
