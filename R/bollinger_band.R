@@ -9,23 +9,7 @@
 #' @export
 bollinger_band <- function(input, mavg_days = 20, n_stddev = 2) {
 	bb_moving_sd <- function(input, n = 20) {
-		ma <- input[1]
-		variance <- 0
-		variance_queue <- queue()
-		variance_queue %>% pushback(0)
-		ret <- c(0)
-
-		for (i in 2:length(input)) {
-			ma <- ma + input[i]
-			variance <- variance + (input[i] - ma / min(i, n)) ^ 2
-			variance_queue %>% pushback(variance)
-			if (i > n) {
-				ma <- ma - input[i - n]
-				variance <- variance - variance_queue %>% pop
-			}
-			ret[i] <- sqrt(variance / (min(i, n) - 1))
-		}
-		ret
+		c(0, 2:length(input) %>% sapply(function(i) input[max(1, i - n + 1) : i] %>% sd ))
 	}
 
 	mavg <- input %>% simple_moving_average(mavg_days)
