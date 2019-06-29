@@ -3,14 +3,17 @@
 #' Computes the "bollinger band", which is a 20-day SMA +/- 2 standard deviations of an input vector.
 #'
 #' @param input The input vector.
-bb <- function(input, mavg_days = 20, n_stddev = 2) {
+#' @param mavg_days The amount of days in the simple moving average.
+#' @param n_stddev The amount of standard deviations from the moving average the band should span.
+#' @return A data frame containing rows \code{"bollinger_band_top"} and \code{"bollinger_band_bottom"} corresponding to the top and bottom of the band.
+#' @export
+bollinger_band <- function(input, mavg_days = 20, n_stddev = 2) {
 	bb_moving_sd <- function(input, n = 20) {
-		mavg <- input %>% sma(n)
 		ma <- input[1]
 		variance <- 0
 		variance_queue <- queue()
 		variance_queue %>% pushback(0)
-		ret <- c(NA)
+		ret <- c(0)
 
 		for (i in 2:length(input)) {
 			ma <- ma + input[i]
@@ -25,8 +28,8 @@ bb <- function(input, mavg_days = 20, n_stddev = 2) {
 		ret
 	}
 
-	mavg <- input %>% sma(mavg_days)
-	stddev <- bb_moving_sd(mavg_days) * n_stddev
+	mavg <- input %>% simple_moving_average(mavg_days)
+	stddev <- input %>% bb_moving_sd(mavg_days) * n_stddev
 	data.frame("bollinger_band_top" = mavg + stddev,
 			   "bollinger_band_bottom" = mavg - stddev)
 }
