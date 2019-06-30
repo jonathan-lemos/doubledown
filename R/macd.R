@@ -9,7 +9,7 @@
 #' @return A data frame containing columns "macd" and "macd_signal", corresponding to two rows containing the MACD and signal line.
 #' @export
 macd <- function(input, fast = 12, slow = 26, signal = 9) {
-	tmp <- input %>% ema(fast) - input %>% ema(slow)
+	tmp <- input %>% exponential_moving_average(fast) - input %>% exponential_moving_average(slow)
 	data.frame("macd" = tmp,
-			   "macd_signal" = tmp %>% ema(signal))
+			   "macd_signal" = tmp %>% exponential_moving_average(signal))
 }

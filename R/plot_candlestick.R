@@ -19,5 +19,6 @@ plot_candlestick <- function(plot) {
 					  height = abs(open - close),
 					  fill = ifelse(close >= open, "up", "down"))) +
 		guides(fill = FALSE, colour = FALSE) +
-		scale_fill_manual(values = c("up" = "darkgreen", "down" = "darkred"))
+		scale_fill_manual(values = c("up" = "darkgreen", "down" = "darkred")) %>%
+		plot_scale_y(plot$low, plot$high)
 }

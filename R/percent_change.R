@@ -10,7 +10,7 @@
 percent_change <- function(input) {
 	ret <- c(NA)
 	for (i in 2:length(input)) {
-		ret[i] = (input[i] / input[i - 1]) * 100
+		ret[i] = (input[i] / input[i - 1] - 1) * 100
 	}
 	ret
 }

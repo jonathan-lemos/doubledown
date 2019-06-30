@@ -22,9 +22,6 @@ plot_bollinger_band <- function(plot, mavg_days = 20, n_stddev = 2, color = "blu
 	gmax <- max(max(bb_focus$bollinger_band_top, plot_focus$high))
 	diff <- gmax - gmin
 
-	print(gmin)
-	print(gmax)
-
 	plot +
 		geom_ribbon(aes(ymin = bb$bollinger_band_bottom,
 						ymax = bb$bollinger_band_top,
@@ -32,6 +29,6 @@ plot_bollinger_band <- function(plot, mavg_days = 20, n_stddev = 2, color = "blu
 					fill = color,
 					alpha = 0.1) +
 		geom_line(aes(y = bb$bollinger_band_bottom), colour = color) +
-		geom_line(aes(y = bb$bollinger_band_top), colour = color) +
-		ylim(gmin - diff * 0.05, gmax + diff * 0.05)
+		geom_line(aes(y = bb$bollinger_band_top), colour = color) %>%
+		plot_scale_y(bb$bollinger_band_bottom, bb$bollinger_band_top)
 }
