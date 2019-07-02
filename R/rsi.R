@@ -8,11 +8,25 @@
 #' @return A vector containing the RSI of the input.
 #' @export
 rsi <- function(input, n = 14) {
+	function rs(gain, loss) 100 - (100 / (1 + (gain / loss)))
+
+	init_sample <- input[2:(n + 1)] - input[1:n]
+	avg_gain <- init_sample[init_sample > 0] %>% mean
+	avg_loss <- init_sample[init_sample < 0] %>% mean
 	ret <- c()
-	for (i in n:length(input)) {
-		sample <- input[i - n:i] %>% pct_chg
-		avg_gain <- sample[sample > 0] %>% mean
-		avg_loss <- sample[sample < 0] %>% mean
-		ret[i] = 100 - (100 / (1 + (avg_gain / avg_loss)))
+	ret[n + 1] = rs(avg_gain, avg_loss)
+
+	for (i in (n + 2):length(input)) {
+		diff <- input[i] - input[i - 1]
+		if (diff > 0) {
+			avg_gain <- (avg_gain * (n - 1) + diff) / n
+			avg_loss <- avg_loss * (n - 1) / n
+		}
+		else {
+			avg_gain <- avg_gain * (n - 1) / n
+			avg_loss <- (avg_loss * (n - 1) + diff) / n
+		}
+		ret[i] = rs(avg_gain, avg_loss)
 	}
+	ret
 }

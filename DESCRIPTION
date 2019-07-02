@@ -1,7 +1,7 @@
 Package: doubledown
 Title: Double Down
 Version: 0.1
-Authors@R: person("Jonathan", "Lemo", email = "jonathanlemos@protonmail.com", role = c("aut", "cre"))
+Authors@R: person("Jonathan", "Lemos", email = "jonathanlemos@protonmail.com", role = c("aut", "cre"))
 Description: Analyzes stock data so you can lose money with confidence.
 Depends: R (>= 3.6.0)
 License: MIT
@@ -14,6 +14,8 @@ Imports:
 	ggplot2,
 	hash,
 	lubridate,
+	plotly,
 	readr,
-	scales
+	scales,
+	shiny
 

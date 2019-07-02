@@ -9,6 +9,8 @@
 #' @export
 bollinger_band <- function(input, mavg_days = 20, n_stddev = 2) {
 	bb_moving_sd <- function(input, n = 20) {
+		# The first value should be 0 because one value has no deviation.
+		# The remaining values are a standard deviation of the previous 20 values, or all previous values if there are less than 20.
 		c(0, 2:length(input) %>% sapply(function(i) input[max(1, i - n + 1) : i] %>% sd ))
 	}
 

@@ -13,15 +13,6 @@ plot_bollinger_band <- function(plot, mavg_days = 20, n_stddev = 2, color = "blu
 	bb <- bollinger_band(plot$data$close)
 	bb$timestamp <- plot$data$timestamp
 
-	bb_focus <- bb %>%
-		filter(timestamp >= plot$since, timestamp <= plot$until)
-	plot_focus <- plot$data %>%
-		filter(timestamp >= plot$since, timestamp <= plot$until)
-
-	gmin <- min(min(bb_focus$bollinger_band_bottom, plot_focus$low))
-	gmax <- max(max(bb_focus$bollinger_band_top, plot_focus$high))
-	diff <- gmax - gmin
-
 	plot +
 		geom_ribbon(aes(ymin = bb$bollinger_band_bottom,
 						ymax = bb$bollinger_band_top,

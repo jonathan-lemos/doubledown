@@ -38,16 +38,12 @@ ddplot <- function(data, since = Sys.Date() - months(1), until = Sys.Date(), num
 			}
 			pchg <- paste(title, ticker, " (", sgn, tmps, "%)", sep = "")
 		}
-		print(str(ret))
 		ret <- ret + ggtitle(pchg)
-		print(str(ret))
 	}
 
 	else if (title != "") {
 		ret <- ret + ggtitle(title)
 	}
-
-	print(str(ret))
 
 	ret$since = since
 	ret$until = until
