@@ -3,12 +3,19 @@
 #' Creates a ggplot() for use with doubledown's functions.
 #'
 #' @param data A data frame containing columns "close", "high", "low", "open", "timestamp", and "volume".
-#' @param since The first date to display on the chart.
-#' @param until The last date to display on the chart.
+#' @param since The first date to display on the chart. If this is NULL, it will display all values on the chart until \code{until}.
+#' @param until The last date to display on the chart. If this is NULL, it will display all values since \code{since}.
 #' @param num_breaks The number of breaks on the x-axis.
 #' @return A base plot for use with \code{plot_} functions.
 #' @export
-ddplot <- function(data, since = Sys.Date() - months(1), until = Sys.Date(), num_breaks = 5, ticker = NULL, title = "") {
+ddplot <- function(data, since = NULL, until = NULL, num_breaks = 5, ticker = NULL, title = "") {
+	if (is.null(since)) {
+		since = as.Date("1700-01-01")
+	}
+	if (is.null(until)) {
+		until = Sys.Date()
+	}
+
 	ret <- ggplot(data,
 				  aes(x = data$timestamp,
 					  close = close,

@@ -9,7 +9,7 @@
 #' @return The plot with a candlestick component added.
 #' @export
 plot_candlestick <- function(plot) {
-	plot +
+	(plot +
 		geom_linerange(aes(x = timestamp,
 						   ymin = low,
 						   ymax = high)) +
@@ -19,6 +19,6 @@ plot_candlestick <- function(plot) {
 					  height = abs(open - close),
 					  fill = ifelse(close >= open, "up", "down"))) +
 		guides(fill = FALSE, colour = FALSE) +
-		scale_fill_manual(values = c("up" = "darkgreen", "down" = "darkred")) %>%
-		plot_scale_y(plot$low, plot$high)
+		scale_fill_manual(values = c("up" = "darkgreen", "down" = "darkred"))) %>%
+		plot_scale_y(plot$data$low, plot$data$high)
 }

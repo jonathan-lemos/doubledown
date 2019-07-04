@@ -13,13 +13,13 @@ plot_bollinger_band <- function(plot, mavg_days = 20, n_stddev = 2, color = "blu
 	bb <- bollinger_band(plot$data$close)
 	bb$timestamp <- plot$data$timestamp
 
-	plot +
+	(plot +
 		geom_ribbon(aes(ymin = bb$bollinger_band_bottom,
 						ymax = bb$bollinger_band_top,
 						),
 					fill = color,
 					alpha = 0.1) +
 		geom_line(aes(y = bb$bollinger_band_bottom), colour = color) +
-		geom_line(aes(y = bb$bollinger_band_top), colour = color) %>%
+		geom_line(aes(y = bb$bollinger_band_top), colour = color)) %>%
 		plot_scale_y(bb$bollinger_band_bottom, bb$bollinger_band_top)
 }
