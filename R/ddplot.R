@@ -5,31 +5,18 @@
 #' @param data A data frame containing columns "close", "high", "low", "open", "timestamp", and "volume".
 #' @param since The first date to display on the chart. If this is NULL, it will display all values on the chart until \code{until}.
 #' @param until The last date to display on the chart. If this is NULL, it will display all values since \code{since}.
-#' @param num_breaks The number of breaks on the x-axis.
 #' @return A base plot for use with \code{plot_} functions.
 #' @export
-ddplot <- function(data, since = NULL, until = NULL, num_breaks = 5, ticker = NULL, title = "") {
+ddplot <- function(data, since = NULL, until = NULL, ticker = NULL, title = "") {
 	if (is.null(since)) {
-		since = as.Date("1700-01-01")
+		since = as.Date("1000-01-01")
 	}
 	if (is.null(until)) {
 		until = Sys.Date()
 	}
 
-	ret <- ggplot(data,
-				  aes(x = data$timestamp,
-					  close = close,
-					  high = high,
-					  low = low,
-					  open = open,
-					  volume = volume)) +
-			scale_x_bd(business.dates = data$timestamp,
-				   labels = date_format("%b '%y"),
-				   max.major.breaks = num_breaks,
-				   limits = c(since, until)) +
-			xlab("date") +
-			ylab("close")
-
+	# build the chart's title based on ticker and title
+	pchg <- title
 	if (!is.null(ticker)) {
 		if (title != "") {
 			title = paste(title, " - ", sep = "")
@@ -45,16 +32,26 @@ ddplot <- function(data, since = NULL, until = NULL, num_breaks = 5, ticker = NU
 			}
 			pchg <- paste(title, ticker, " (", sgn, tmps, "%)", sep = "")
 		}
-		ret <- ret + ggtitle(pchg)
 	}
 
-	else if (title != "") {
-		ret <- ret + ggtitle(title)
-	}
+	ret <- plot_ly(
+				   x = data$timestamp
+				   ) %>%
+	layout(
+		   title = pchg,
+		   xaxis = list(
+						autorange = TRUE,
+						fixedrange = FALSE,
+						type = "category",
+						title = "Date"
+						),
+		   yaxis = list(
+						autorange = TRUE,
+						fixedrange = FALSE,
+						title = "Price"
+		   )
+	)
 
-	ret$since = since
-	ret$until = until
-	ret$gmin = NULL
-	ret$gmax = NULL
+	ret$data = data
 	ret
 }
