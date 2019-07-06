@@ -43,13 +43,33 @@ ddplot <- function(data, since = NULL, until = NULL, ticker = NULL, title = "") 
 						autorange = TRUE,
 						fixedrange = FALSE,
 						type = "category",
-						title = "Date"
+						title = "Date",
+						rangeselector = list(
+											 buttons = list(
+															list(count = 1, label = "1 mo", step = "month", stepmode = "backward"),
+															list(count = 3, label = "3 mo", step = "month", stepmode = "backward"),
+															list(count = 1, label = "1 yr", step = "year", stepmode = "backward"),
+															list(step = "all")
+											 )
+						)
 						),
 		   yaxis = list(
+						side = "left",
 						autorange = TRUE,
 						fixedrange = FALSE,
-						title = "Price"
-		   )
+						title = "Price",
+						showgrid = FALSE,
+						zeroline = FALSE
+						),
+		   yaxis2 = list(
+						autorange = TRUE,
+						fixedrange = FALSE,
+						side = "right",
+						overlaying = "y",
+						title = "Volume",
+						showgrid = FALSE,
+						zeroline = FALSE
+						 )
 	)
 
 	ret$data = data

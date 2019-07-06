@@ -22,6 +22,18 @@ av_get <- function(symbol, api_key) {
 		input
 	}
 
+	split_adjust_vol <- function(input, split_coefficient) {
+		if (length(input) != length(split_coefficient)) {
+			stop("The length of the input does not equal the length of the split coefficient data.")
+		}
+		coef <- 1
+		for (i in length(input):1) {
+			input[i] <- input[i] * coef
+			coef <- coef * split_coefficient[i]
+		}
+		input
+	}
+
 	link <- paste("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=", symbol, "&datatype=csv&outputsize=full&apikey=", api_key, sep = "")
 
 	response <- link %>% read.csv
@@ -32,7 +44,7 @@ av_get <- function(symbol, api_key) {
 			   high = high %>% split_adjust(split_coefficient),
 			   low = low %>% split_adjust(split_coefficient),
 			   close = close %>% split_adjust(split_coefficient),
-			   volume = volume %>% split_adjust(split_coefficient)
+			   volume = volume %>% split_adjust_vol(split_coefficient)
 			   ) %>%
 		select(-adjusted_close, -dividend_amount, -split_coefficient)
 }

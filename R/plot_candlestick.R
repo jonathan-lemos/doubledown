@@ -15,6 +15,9 @@ plot_candlestick <- function(plot) {
 				  open = plot$data$open,
 				  close = plot$data$close,
 				  low = plot$data$low,
-				  high = plot$data$high
+				  high = plot$data$high,
+				  yaxis = "y",
+				  name = "Price",
+				  hoverinfo = "text"
 		)
 }
