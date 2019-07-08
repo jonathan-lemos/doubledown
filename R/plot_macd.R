@@ -11,8 +11,7 @@
 plot_macd <- function(plot, fast = 12, slow = 26, signal = 9, color = "blue", signal_color = "orange") {
 	tmp <- macd(plot$data$close, fast, slow, signal)
 
-	(plot +
-		geom_line(aes(y = tmp$macd), color = color) +
-		geom_line(aes(y = tmp$macd_signal), color = signal_color)) %>%
-		plot_scale_y(tmp$macd, tmp$macd_signal)
+	plot %>%
+		add_lines(y = tmp$macd, name = "MACD", yaxis = "y2") %>%
+		add_lines(y = tmp$macd_signal, name = "MACD Signal", yaxis = "y2")
 }

@@ -7,10 +7,9 @@
 #' @export
 plot_volume <- function(plot) {
 	plot %>%
-		add_trace(y = plot$data$volume,
+		add_trace(y = ~volume,
 				  type = "bar",
-				 yaxis = "y2",
-					marker = list(color = '#C9EFF9'),
-				 name = "Volume",
-				hoverinfo = "text")
+				  yaxis = "y",
+				  marker = list(color = '#C9EFF9'),
+				  name = "Volume")
 }

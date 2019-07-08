@@ -12,12 +12,11 @@ plot_candlestick <- function(plot) {
 	plot %>%
 		add_trace(
 				  type = "candlestick",
-				  open = plot$data$open,
-				  close = plot$data$close,
-				  low = plot$data$low,
-				  high = plot$data$high,
-				  yaxis = "y",
-				  name = "Price",
-				  hoverinfo = "text"
+				  open = ~open,
+				  close = ~close,
+				  low = ~low,
+				  high = ~high,
+				  yaxis = "y2",
+				  name = "Price"
 		)
 }

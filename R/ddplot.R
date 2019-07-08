@@ -35,6 +35,7 @@ ddplot <- function(data, since = NULL, until = NULL, ticker = NULL, title = "") 
 	}
 
 	ret <- plot_ly(
+				   data,
 				   x = data$timestamp
 				   ) %>%
 	layout(
@@ -43,33 +44,21 @@ ddplot <- function(data, since = NULL, until = NULL, ticker = NULL, title = "") 
 						autorange = TRUE,
 						fixedrange = FALSE,
 						type = "category",
-						title = "Date",
-						rangeselector = list(
-											 buttons = list(
-															list(count = 1, label = "1 mo", step = "month", stepmode = "backward"),
-															list(count = 3, label = "3 mo", step = "month", stepmode = "backward"),
-															list(count = 1, label = "1 yr", step = "year", stepmode = "backward"),
-															list(step = "all")
-											 )
-						)
+						title = "Date"
 						),
 		   yaxis = list(
-						side = "left",
-						autorange = TRUE,
-						fixedrange = FALSE,
-						title = "Price",
-						showgrid = FALSE,
-						zeroline = FALSE
-						),
-		   yaxis2 = list(
 						autorange = TRUE,
 						fixedrange = FALSE,
 						side = "right",
+						title = "Volume"
+						 ),
+		   yaxis2 = list(
+						side = "left",
+						autorange = TRUE,
+						fixedrange = FALSE,
 						overlaying = "y",
-						title = "Volume",
-						showgrid = FALSE,
-						zeroline = FALSE
-						 )
+						title = "Price"
+						)
 	)
 
 	ret$data = data

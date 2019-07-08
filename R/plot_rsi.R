@@ -7,9 +7,11 @@
 #' @param color The color of the drawn line.
 #' @return The same plot with the RSI added.
 #' @export
-plot_rsi <- function(plot, n = 14, color = "red") {
-	tmp <- rsi(plot$data$close, n)
-	(plot +
-	 	geom_line(aes(y = tmp, colour = color))) %>%
-		plot_scale_y(tmp)
+plot_rsi <- function(plot, n = 14, levels = c(30, 70), color = "red") {
+	for (level in levels) {
+		print(level)
+		plot <- plot %>% plot_hline(level)
+	}
+	plot %>%
+		add_lines(y = ~rsi(plot$data$close, n), yaxis = "y2")
 }

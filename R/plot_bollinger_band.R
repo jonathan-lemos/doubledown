@@ -14,10 +14,16 @@ plot_bollinger_band <- function(plot, mavg_days = 20, n_stddev = 2) {
 
 	plot %>%
 		add_lines(y = bb$bollinger_band_top,
-				  fill = "tonexty",
-				  name = "Bollinger Band") %>%
+				  line = list(color = "#0088AA"),
+				  name = "Bollinger Band",
+				  showlegend = FALSE,
+				  hoverinfo = "none") %>%
 	add_lines(y = bb$bollinger_band_bottom,
+			  line = list(color = "#0088AA"),
 			  fill = "tonexty",
-			  name = "Bollinger Band")
+			  fillcolor = "#00DDAA22",
+			  name = "Bollinger Band",
+			  showlegend = FALSE,
+			  hoverinfo = "none")
 
 }
